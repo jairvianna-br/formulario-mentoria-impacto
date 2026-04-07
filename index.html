@@ -1,0 +1,619 @@
+
+<style>
+:root{--gold:#C49A2A;--gold-bg:#FFF8E7;--s1:#185FA5;--s2:#BA7517;--s3:#3B6D11;--s4:#A32D2D;--s5:#534AB7;--s6:#5F5E5A;--s7:#854F0B}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans,sans-serif);background:var(--color-background-tertiary);color:var(--color-text-primary);font-size:15px;line-height:1.6}
+.app{display:flex;flex-direction:column;min-height:600px}
+.tabs{display:flex;border-bottom:1px solid var(--color-border-tertiary);background:var(--color-background-primary);position:sticky;top:0;z-index:100}
+.tab{padding:12px 20px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:none;color:var(--color-text-secondary);border-bottom:2px solid transparent;transition:all .2s}
+.tab.active{color:var(--color-text-primary);border-bottom-color:var(--gold)}
+.tab-badge{display:inline-flex;align-items:center;justify-content:center;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:10px;font-size:11px;padding:1px 7px;margin-left:6px;color:var(--color-text-secondary)}
+.tab.active .tab-badge{background:#FFF8E7;color:var(--gold);border-color:#E8C97A}
+.page{display:none;padding:24px}
+.page.active{display:block}
+
+/* FORM */
+.form-header{text-align:center;padding:32px 24px 24px;max-width:660px;margin:0 auto}
+.form-tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:12px}
+.form-title{font-size:24px;font-weight:500;line-height:1.3;margin-bottom:12px}
+.form-desc{font-size:13px;color:var(--color-text-secondary);max-width:480px;margin:0 auto 16px}
+.form-time{display:inline-flex;align-items:center;gap:6px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--color-text-secondary)}
+.progress{background:var(--color-background-secondary);height:3px;margin:0 24px 24px;border-radius:10px;overflow:hidden;max-width:612px;margin-left:auto;margin-right:auto}
+.progress-fill{height:100%;background:var(--gold);border-radius:10px;width:0%;transition:width .4s ease}
+
+.form-body{max-width:660px;margin:0 auto;display:flex;flex-direction:column;gap:16px;padding-bottom:40px}
+.section-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg)}
+.section-head{display:flex;align-items:center;gap:10px;padding:14px 20px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.section-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.section-name{font-size:14px;font-weight:500}
+.section-num{font-size:11px;color:var(--color-text-secondary);margin-left:auto;letter-spacing:1px}
+.section-body{padding:20px;display:flex;flex-direction:column;gap:20px}
+
+.field{display:flex;flex-direction:column;gap:8px}
+.field label{font-size:13px;font-weight:500;color:var(--color-text-primary);line-height:1.5}
+.field label .req{color:var(--gold);margin-left:2px}
+.field .hint{font-size:12px;color:var(--color-text-secondary)}
+input[type=text],input[type=number],textarea{background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);color:var(--color-text-primary);font-family:inherit;font-size:13px;padding:10px 14px;width:100%;outline:none;transition:border-color .2s}
+input[type=text]:focus,input[type=number]:focus,textarea:focus{border-color:var(--gold);box-shadow:0 0 0 2px rgba(196,154,42,.15)}
+textarea{resize:vertical;min-height:80px}
+::placeholder{color:var(--color-text-tertiary)}
+
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{display:flex;align-items:center;gap:7px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:20px;padding:7px 14px;cursor:pointer;font-size:12px;color:var(--color-text-secondary);transition:all .15s;user-select:none}
+.opt input{display:none}
+.opt:hover{border-color:var(--color-border-primary);color:var(--color-text-primary)}
+.opt.on{border-color:var(--gold);color:var(--gold);background:#FFF8E7}
+
+.scale-wrap{display:flex;flex-direction:column;gap:6px}
+.scale-btns{display:flex;gap:6px}
+.s-btn{flex:1;height:38px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);color:var(--color-text-secondary);font-size:14px;font-weight:500;font-family:inherit;cursor:pointer;transition:all .15s}
+.s-btn:hover{border-color:var(--color-border-primary);color:var(--color-text-primary)}
+.s-btn.on{background:#FFF8E7;border-color:var(--gold);color:var(--gold)}
+.scale-lbs{display:flex;justify-content:space-between;font-size:11px;color:var(--color-text-secondary)}
+
+.rating-grid{display:flex;flex-direction:column;gap:8px}
+.r-row{display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md)}
+.r-lbl{flex:1;font-size:12px;color:var(--color-text-secondary)}
+.r-stars{display:flex;gap:4px}
+.r-btn{width:30px;height:30px;background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:6px;color:var(--color-text-secondary);font-size:12px;font-weight:500;font-family:inherit;cursor:pointer;transition:all .15s}
+.r-btn.on{background:#FFF8E7;border-color:var(--gold);color:var(--gold)}
+
+.remuner-grid,.trimestre-grid{display:flex;flex-direction:column;gap:8px}
+.remuner-row,.trimestre-row{display:flex;align-items:center;gap:12px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 14px}
+.remuner-lbl,.trimestre-lbl{flex:1;font-size:13px;color:var(--color-text-secondary)}
+.remuner-input,.trimestre-input{width:120px;padding:8px 12px}
+
+.submit-wrap{text-align:center;padding-top:8px}
+.btn-submit{background:var(--gold);border:none;border-radius:20px;color:#fff;cursor:pointer;font-family:inherit;font-size:14px;font-weight:500;padding:14px 40px;transition:all .2s}
+.btn-submit:hover{opacity:.9;transform:translateY(-1px)}
+.submit-note{margin-top:10px;font-size:12px;color:var(--color-text-secondary)}
+
+/* RESPOSTAS */
+.respostas-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:gap}
+.respostas-title{font-size:16px;font-weight:500}
+.respostas-sub{font-size:12px;color:var(--color-text-secondary);margin-top:2px}
+.btn-export{background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:8px 16px;font-size:13px;font-family:inherit;cursor:pointer;color:var(--color-text-primary);transition:all .15s}
+.btn-export:hover{background:var(--color-background-secondary)}
+
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.stat-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:14px 16px}
+.stat-label{font-size:12px;color:var(--color-text-secondary);margin-bottom:4px}
+.stat-val{font-size:22px;font-weight:500}
+
+.filter-row{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.filter-btn{padding:6px 14px;font-size:12px;font-family:inherit;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);border-radius:20px;cursor:pointer;color:var(--color-text-secondary);transition:all .15s}
+.filter-btn.on{border-color:var(--gold);color:var(--gold);background:#FFF8E7}
+
+.table-wrap{overflow-x:auto;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);background:var(--color-background-primary)}
+table{width:100%;border-collapse:collapse;font-size:12px;min-width:700px}
+th{text-align:left;padding:10px 14px;font-weight:500;color:var(--color-text-secondary);font-size:11px;letter-spacing:.5px;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);white-space:nowrap}
+td{padding:10px 14px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--color-background-secondary)}
+.turma-badge{display:inline-flex;padding:2px 10px;border-radius:10px;font-size:11px;font-weight:500}
+.t1{background:#E6F1FB;color:#185FA5}.t2{background:#EAF3DE;color:#3B6D11}.t3{background:#FAEEDA;color:#854F0B}
+.empty-state{text-align:center;padding:60px 24px;color:var(--color-text-secondary)}
+.empty-icon{font-size:32px;margin-bottom:12px;opacity:.4}
+.detail-btn{background:none;border:none;color:var(--gold);cursor:pointer;font-size:12px;font-family:inherit;padding:0;text-decoration:underline}
+
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:center;justify-content:center;padding:20px}
+.modal-bg.open{display:flex}
+.modal{background:var(--color-background-primary);border-radius:var(--border-radius-lg);max-width:580px;width:100%;max-height:80vh;overflow-y:auto;padding:24px}
+.modal-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.modal-title{font-size:16px;font-weight:500}
+.modal-close{background:none;border:none;cursor:pointer;color:var(--color-text-secondary);font-size:20px;line-height:1;padding:0}
+.modal-body{display:flex;flex-direction:column;gap:14px}
+.modal-field{border-bottom:0.5px solid var(--color-border-tertiary);padding-bottom:12px}
+.modal-field:last-child{border-bottom:none;padding-bottom:0}
+.modal-q{font-size:12px;color:var(--color-text-secondary);margin-bottom:4px}
+.modal-a{font-size:13px;color:var(--color-text-primary)}
+
+/* THANK YOU */
+.ty{display:none;text-align:center;padding:80px 24px}
+.ty.show{display:block}
+.ty-icon{font-size:48px;margin-bottom:20px;opacity:.7}
+.ty-title{font-size:22px;font-weight:500;margin-bottom:10px}
+.ty-desc{font-size:14px;color:var(--color-text-secondary);max-width:360px;margin:0 auto}
+</style>
+
+<div class="app">
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('form')">Formulário</button>
+    <button class="tab" onclick="showTab('respostas')">Respostas <span class="tab-badge" id="count-badge">0</span></button>
+  </div>
+
+  <!-- FORMULÁRIO -->
+  <div id="tab-form" class="page active">
+    <div id="form-view">
+      <div class="form-header">
+        <div class="form-tag">Mentoria Impacto · 2025</div>
+        <div class="form-title">Avaliação Estratégica — 1º Trimestre</div>
+        <p class="form-desc">Estamos finalizando o primeiro trimestre e entrando no momento mais importante do ano para crescimento da clínica. Preencha com honestidade — suas respostas vão direcionar os próximos passos da mentoria.</p>
+        <div class="form-time">Tempo médio: 5 a 8 minutos</div>
+      </div>
+      <div class="progress"><div class="progress-fill" id="prog"></div></div>
+      <div class="form-body">
+
+        <!-- IDENTIFICAÇÃO -->
+        <div class="section-card">
+          <div class="section-head">
+            <div class="section-dot" style="background:var(--gold)"></div>
+            <div class="section-name">Identificação</div>
+          </div>
+          <div class="section-body">
+            <div class="field"><label>Nome completo<span class="req">*</span></label><input type="text" id="f-nome" placeholder="Seu nome completo"></div>
+            <div class="field"><label>E-mail<span class="req">*</span></label><input type="text" id="f-email" placeholder="seu@email.com"></div>
+            <div class="field">
+              <label>Turma<span class="req">*</span></label>
+              <div class="opts">
+                <label class="opt"><input type="radio" name="turma" value="Turma 1">Turma 1</label>
+                <label class="opt"><input type="radio" name="turma" value="Turma 2">Turma 2</label>
+                <label class="opt"><input type="radio" name="turma" value="Turma 3">Turma 3</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- S1 -->
+        <div class="section-card">
+          <div class="section-head">
+            <div class="section-dot" style="background:var(--s1)"></div>
+            <div class="section-name">Processos e Pessoas</div>
+            <div class="section-num">01</div>
+          </div>
+          <div class="section-body">
+            <div class="field"><label>Quantas pessoas fazem parte da sua equipe?<span class="req">*</span></label>
+              <div class="opts">
+                <label class="opt"><input type="radio" name="eq" value="Só eu">Só eu</label>
+                <label class="opt"><input type="radio" name="eq" value="2-3">2 a 3</label>
+                <label class="opt"><input type="radio" name="eq" value="4-6">4 a 6</label>
+                <label class="opt"><input type="radio" name="eq" value="7-10">7 a 10</label>
+                <label class="opt"><input type="radio" name="eq" value="10+">Mais de 10</label>
+              </div>
+            </div>
+            <div class="field"><label>Como sua equipe está organizada hoje?<span class="req">*</span></label><textarea id="f-org" placeholder="Cargos, funções, responsabilidades..."></textarea></div>
+            <div class="field"><label>Modelo de contratação predominante<span class="req">*</span></label>
+              <div class="opts">
+                <label class="opt"><input type="radio" name="cont" value="CLT">CLT</label>
+                <label class="opt"><input type="radio" name="cont" value="PJ">PJ</label>
+                <label class="opt"><input type="radio" name="cont" value="Misto">Misto</label>
+              </div>
+            </div>
+            <div class="field">
+              <label>Remuneração — quantas pessoas em cada modelo?<span class="req">*</span></label>
+              <p class="hint">Informe o número de pessoas em cada modelo</p>
+              <div class="remuner-grid">
+                <div class="remuner-row"><div class="remuner-lbl">Só fixo</div><input type="number" class="remuner-input" id="f-rem1" min="0" placeholder="0 pessoas"></div>
+                <div class="remuner-row"><div class="remuner-lbl">Fixo + variável</div><input type="number" class="remuner-input" id="f-rem2" min="0" placeholder="0 pessoas"></div>
+                <div class="remuner-row"><div class="remuner-lbl">Só variável</div><input type="number" class="remuner-input" id="f-rem3" min="0" placeholder="0 pessoas"></div>
+              </div>
+            </div>
+            <div class="field"><label>Existe estrutura de metas e bonificação?<span class="req">*</span></label>
+              <div class="opts">
+                <label class="opt"><input type="radio" name="metas" value="Sim">Sim</label>
+                <label class="opt"><input type="radio" name="metas" value="Não">Não</label>
+                <label class="opt"><input type="radio" name="metas" value="Parcial">Parcial</label>
+              </div>
+            </div>
+            <div class="field"><label>Como funciona a rotina da clínica hoje?<span class="req">*</span></label><textarea id="f-rotina" placeholder="Abertura, atendimentos, processos internos..."></textarea></div>
+            <div class="field"><label>Existe equipe dedicada ao comercial?<span class="req">*</span></label>
+              <div class="opts">
+                <label class="opt"><input type="radio" name="com-team" value="Sim">Sim</label>
+                <label class="opt"><input type="radio" name="com-team" value="Não">Não</label>
+              </div>
+            </div>
+            <div class="field"><label>Conta com profissionais técnicos (esteticista, enfermeira, fisioterapeuta)?<span class="req">*</span></label>
+              <div class="opts">
+                <label class="opt"><input type="radio" name="tec" value="Sim">Sim</label>
+                <label class="opt"><input type="radio" name="tec" value="Não">Não</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- S2 -->
+        <div class="section-card">
+          <div class="section-head">
+            <div class="section-dot" style="background:var(--s2)"></div>
+            <div class="section-name">Comercial</div>
+            <div class="section-num">02</div>
+          </div>
+          <div class="section-body">
+            <div class="field"><label>Como acontece o fechamento dos orçamentos?<span class="req">*</span></label><textarea id="f-orc" placeholder="Do contato à decisão de compra..."></textarea></div>
+            <div class="field"><label>Como é feito o atendimento dos leads?<span class="req">*</span></label><textarea id="f-leads" placeholder="WhatsApp, ligação, presencial, tempo de resposta..."></textarea></div>
+            <div class="field"><label>Existe processo estruturado de follow-up?<span class="req">*</span></label>
+              <div class="opts">
+                <label class="opt"><input type="radio" name="fu" value="Sim">Sim</label>
+                <label class="opt"><input type="radio" name="fu" value="Não">Não</label>
+                <label class="opt"><input type="radio" name="fu" value="Parcial">Parcial</label>
+              </div>
+            </div>
+            <div class="field"><label>Existe recuperação ativa de orçamentos não fechados?<span class="req">*</span></label>
+              <div class="opts">
+                <label class="opt"><input type="radio" name="rec" value="Sim">Sim</label>
+                <label class="opt"><input type="radio" name="rec" value="Não">Não</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- S3 -->
+        <div class="section-card">
+          <div class="section-head">
+            <div class="section-dot" style="background:var(--s3)"></div>
+            <div class="section-name">Marketing</div>
+            <div class="section-num">03</div>
+          </div>
+          <div class="section-body">
+            <div class="field"><label>Possui agência de marketing?<span class="req">*</span></label>
+              <div class="opts">
+                <label class="opt"><input type="radio" name="ag" value="Sim">Sim</label>
+                <label class="opt"><input type="radio" name="ag" value="Não">Não</label>
+              </div>
+            </div>
+            <div class="field"><label>Quais serviços a agência realiza? (marque os que se aplicam)</label>
+              <div class="opts">
+                <label class="opt"><input type="checkbox" name="mkt" value="Tráfego pago">Tráfego pago</label>
+                <label class="opt"><input type="checkbox" name="mkt" value="Posts">Posts</label>
+                <label class="opt"><input type="checkbox" name="mkt" value="Stories">Stories</label>
+                <label class="opt"><input type="checkbox" name="mkt" value="Captação de leads">Captação de leads</label>
+                <label class="opt"><input type="checkbox" name="mkt" value="Landing pages">Landing pages</label>
+                <label class="opt"><input type="checkbox" name="mkt" value="Branding">Branding</label>
+                <label class="opt"><input type="checkbox" name="mkt" value="Outros">Outros</label>
+              </div>
+            </div>
+            <div class="field">
+              <label>Satisfação com o marketing atual (1 a 5)<span class="req">*</span></label>
+              <div class="scale-wrap">
+                <div class="scale-btns" id="sat-mkt">
+                  <button type="button" class="s-btn" onclick="setSc('sat-mkt',1)">1</button>
+                  <button type="button" class="s-btn" onclick="setSc('sat-mkt',2)">2</button>
+                  <button type="button" class="s-btn" onclick="setSc('sat-mkt',3)">3</button>
+                  <button type="button" class="s-btn" onclick="setSc('sat-mkt',4)">4</button>
+                  <button type="button" class="s-btn" onclick="setSc('sat-mkt',5)">5</button>
+                </div>
+                <div class="scale-lbs"><span>Muito insatisfeito</span><span>Muito satisfeito</span></div>
+              </div>
+            </div>
+            <div class="field"><label>Na sua visão, como está o marketing da clínica hoje? O que funciona e o que falta?<span class="req">*</span></label><textarea id="f-mkt-open" placeholder="Compartilhe sua percepção — pontos positivos, frustrações, o que sente falta..."></textarea></div>
+          </div>
+        </div>
+
+        <!-- S4 -->
+        <div class="section-card">
+          <div class="section-head">
+            <div class="section-dot" style="background:var(--s4)"></div>
+            <div class="section-name">Dores e Gargalos</div>
+            <div class="section-num">04</div>
+          </div>
+          <div class="section-body">
+            <div class="field"><label>O que mais te incomoda na clínica hoje?<span class="req">*</span></label><textarea id="f-d1" placeholder="Seja honesto — esse espaço é para diagnóstico real..."></textarea></div>
+            <div class="field"><label>Onde você sente que está perdendo oportunidades?<span class="req">*</span></label><textarea id="f-d2" placeholder="Atendimento, follow-up, marketing, precificação..."></textarea></div>
+            <div class="field"><label>O que você já tentou que não funcionou como esperado?<span class="req">*</span></label><textarea id="f-d3" placeholder="Ações, contratações, processos testados..."></textarea></div>
+          </div>
+        </div>
+
+        <!-- S5 -->
+        <div class="section-card">
+          <div class="section-head">
+            <div class="section-dot" style="background:var(--s5)"></div>
+            <div class="section-name">Visão e Objetivos</div>
+            <div class="section-num">05</div>
+          </div>
+          <div class="section-body">
+            <div class="field"><label>Qual é seu principal objetivo para os próximos 6 meses?<span class="req">*</span></label><textarea id="f-obj" placeholder="Número, posicionamento, equipe, novos serviços..."></textarea></div>
+            <div class="field"><label>O que precisa acontecer para chegar lá?<span class="req">*</span></label><textarea id="f-caminho" placeholder="Movimentos, decisões, mudanças necessárias..."></textarea></div>
+          </div>
+        </div>
+
+        <!-- S6 -->
+        <div class="section-card">
+          <div class="section-head">
+            <div class="section-dot" style="background:var(--s6)"></div>
+            <div class="section-name">Números</div>
+            <div class="section-num">06</div>
+          </div>
+          <div class="section-body">
+            <div class="field"><label>Faturamento médio mensal no 1º trimestre<span class="req">*</span></label>
+              <div class="opts">
+                <label class="opt"><input type="radio" name="fat" value="Até R$ 50k">Até R$ 50k</label>
+                <label class="opt"><input type="radio" name="fat" value="R$ 50k–100k">R$ 50k–100k</label>
+                <label class="opt"><input type="radio" name="fat" value="R$ 100k–150k">R$ 100k–150k</label>
+                <label class="opt"><input type="radio" name="fat" value="Acima de R$ 150k">Acima de R$ 150k</label>
+              </div>
+            </div>
+            <div class="field"><label>Ticket médio atual<span class="req">*</span></label><input type="text" id="f-ticket" placeholder="Ex: R$ 350,00"></div>
+            <div class="field"><label>Pacientes atendidos no trimestre<span class="req">*</span></label>
+              <div class="opts">
+                <label class="opt"><input type="radio" name="pac" value="Menos de 50">Menos de 50</label>
+                <label class="opt"><input type="radio" name="pac" value="50 a 150">50 a 150</label>
+                <label class="opt"><input type="radio" name="pac" value="150 a 300">150 a 300</label>
+                <label class="opt"><input type="radio" name="pac" value="Mais de 300">Mais de 300</label>
+              </div>
+            </div>
+            <div class="field">
+              <label>Expectativa de faturamento mês a mês — 2º trimestre<span class="req">*</span></label>
+              <div class="trimestre-grid">
+                <div class="trimestre-row"><div class="trimestre-lbl">Abril</div><input type="text" class="trimestre-input" id="f-abril" placeholder="Ex: R$ 80.000"></div>
+                <div class="trimestre-row"><div class="trimestre-lbl">Maio</div><input type="text" class="trimestre-input" id="f-maio" placeholder="Ex: R$ 90.000"></div>
+                <div class="trimestre-row"><div class="trimestre-lbl">Junho</div><input type="text" class="trimestre-input" id="f-junho" placeholder="Ex: R$ 100.000"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- S7 -->
+        <div class="section-card">
+          <div class="section-head">
+            <div class="section-dot" style="background:var(--s7)"></div>
+            <div class="section-name">Nível de Implementação</div>
+            <div class="section-num">07</div>
+          </div>
+          <div class="section-body">
+            <p style="font-size:12px;color:var(--color-text-secondary)">Avalie de 1 (não implementado) a 5 (totalmente estruturado)</p>
+            <div class="rating-grid">
+              <div class="r-row"><div class="r-lbl">Estrutura e alinhamento da equipe</div><div class="r-stars" id="r1"><button class="r-btn" onclick="setR('r1',1)">1</button><button class="r-btn" onclick="setR('r1',2)">2</button><button class="r-btn" onclick="setR('r1',3)">3</button><button class="r-btn" onclick="setR('r1',4)">4</button><button class="r-btn" onclick="setR('r1',5)">5</button></div></div>
+              <div class="r-row"><div class="r-lbl">Cultura comercial na clínica</div><div class="r-stars" id="r2"><button class="r-btn" onclick="setR('r2',1)">1</button><button class="r-btn" onclick="setR('r2',2)">2</button><button class="r-btn" onclick="setR('r2',3)">3</button><button class="r-btn" onclick="setR('r2',4)">4</button><button class="r-btn" onclick="setR('r2',5)">5</button></div></div>
+              <div class="r-row"><div class="r-lbl">Processo de vendas definido</div><div class="r-stars" id="r3"><button class="r-btn" onclick="setR('r3',1)">1</button><button class="r-btn" onclick="setR('r3',2)">2</button><button class="r-btn" onclick="setR('r3',3)">3</button><button class="r-btn" onclick="setR('r3',4)">4</button><button class="r-btn" onclick="setR('r3',5)">5</button></div></div>
+              <div class="r-row"><div class="r-lbl">Follow-up e recuperação de pacientes</div><div class="r-stars" id="r4"><button class="r-btn" onclick="setR('r4',1)">1</button><button class="r-btn" onclick="setR('r4',2)">2</button><button class="r-btn" onclick="setR('r4',3)">3</button><button class="r-btn" onclick="setR('r4',4)">4</button><button class="r-btn" onclick="setR('r4',5)">5</button></div></div>
+              <div class="r-row"><div class="r-lbl">Precificação estruturada</div><div class="r-stars" id="r5"><button class="r-btn" onclick="setR('r5',1)">1</button><button class="r-btn" onclick="setR('r5',2)">2</button><button class="r-btn" onclick="setR('r5',3)">3</button><button class="r-btn" onclick="setR('r5',4)">4</button><button class="r-btn" onclick="setR('r5',5)">5</button></div></div>
+              <div class="r-row"><div class="r-lbl">Metas e comissionamento definidos</div><div class="r-stars" id="r6"><button class="r-btn" onclick="setR('r6',1)">1</button><button class="r-btn" onclick="setR('r6',2)">2</button><button class="r-btn" onclick="setR('r6',3)">3</button><button class="r-btn" onclick="setR('r6',4)">4</button><button class="r-btn" onclick="setR('r6',5)">5</button></div></div>
+              <div class="r-row"><div class="r-lbl">Organização da rotina</div><div class="r-stars" id="r7"><button class="r-btn" onclick="setR('r7',1)">1</button><button class="r-btn" onclick="setR('r7',2)">2</button><button class="r-btn" onclick="setR('r7',3)">3</button><button class="r-btn" onclick="setR('r7',4)">4</button><button class="r-btn" onclick="setR('r7',5)">5</button></div></div>
+              <div class="r-row"><div class="r-lbl">Posicionamento da clínica</div><div class="r-stars" id="r8"><button class="r-btn" onclick="setR('r8',1)">1</button><button class="r-btn" onclick="setR('r8',2)">2</button><button class="r-btn" onclick="setR('r8',3)">3</button><button class="r-btn" onclick="setR('r8',4)">4</button><button class="r-btn" onclick="setR('r8',5)">5</button></div></div>
+              <div class="r-row"><div class="r-lbl">Campanhas comerciais ativas</div><div class="r-stars" id="r9"><button class="r-btn" onclick="setR('r9',1)">1</button><button class="r-btn" onclick="setR('r9',2)">2</button><button class="r-btn" onclick="setR('r9',3)">3</button><button class="r-btn" onclick="setR('r9',4)">4</button><button class="r-btn" onclick="setR('r9',5)">5</button></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="submit-wrap">
+          <button class="btn-submit" onclick="submitForm()">Enviar Avaliação →</button>
+          <p class="submit-note">Suas respostas serão usadas exclusivamente para direcionar sua mentoria.</p>
+        </div>
+      </div>
+    </div>
+    <div class="ty" id="ty">
+      <div class="ty-icon">✦</div>
+      <div class="ty-title">Avaliação enviada!</div>
+      <p class="ty-desc">Obrigado pelo tempo dedicado. Suas respostas vão direcionar o próximo ciclo da mentoria com muito mais precisão e resultado.</p>
+    </div>
+  </div>
+
+  <!-- RESPOSTAS -->
+  <div id="tab-respostas" class="page">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;gap:12px;flex-wrap:wrap">
+      <div>
+        <div class="respostas-title">Respostas recebidas</div>
+        <div class="respostas-sub" id="res-sub">Nenhuma resposta ainda</div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn-export" onclick="exportCSV()">Exportar CSV</button>
+      </div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-label">Total de respostas</div><div class="stat-val" id="st-total">0</div></div>
+      <div class="stat-card"><div class="stat-label">Turma 1</div><div class="stat-val" id="st-t1">0</div></div>
+      <div class="stat-card"><div class="stat-label">Turma 2</div><div class="stat-val" id="st-t2">0</div></div>
+    </div>
+    <div class="stats-row" style="grid-template-columns:1fr 1fr;margin-top:-8px">
+      <div class="stat-card"><div class="stat-label">Turma 3</div><div class="stat-val" id="st-t3">0</div></div>
+      <div class="stat-card"><div class="stat-label">Última resposta</div><div class="stat-val" style="font-size:14px" id="st-last">—</div></div>
+    </div>
+    <div class="filter-row">
+      <button class="filter-btn on" onclick="setFilter('Todas')">Todas</button>
+      <button class="filter-btn" onclick="setFilter('Turma 1')">Turma 1</button>
+      <button class="filter-btn" onclick="setFilter('Turma 2')">Turma 2</button>
+      <button class="filter-btn" onclick="setFilter('Turma 3')">Turma 3</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Data/hora</th>
+            <th>Nome</th>
+            <th>E-mail</th>
+            <th>Turma</th>
+            <th>Equipe</th>
+            <th>Faturamento Q1</th>
+            <th>Ticket médio</th>
+            <th>Detalhes</th>
+          </tr>
+        </thead>
+        <tbody id="res-tbody"></tbody>
+      </table>
+      <div class="empty-state" id="empty-state">
+        <div class="empty-icon">◻</div>
+        <p style="font-weight:500;margin-bottom:6px">Nenhuma resposta ainda</p>
+        <p style="font-size:13px">As respostas aparecem aqui assim que os alunos enviarem o formulário.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-bg" id="modal" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-top">
+      <div class="modal-title" id="modal-title">Detalhes da resposta</div>
+      <button class="modal-close" onclick="document.getElementById('modal').classList.remove('open')">×</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+let responses = [];
+let currentFilter = 'Todas';
+const ratings = {r1:0,r2:0,r3:0,r4:0,r5:0,r6:0,r7:0,r8:0,r9:0};
+const scales = {'sat-mkt':0};
+const rLabels = {r1:'Equipe',r2:'Cultura comercial',r3:'Processo de vendas',r4:'Follow-up',r5:'Precificação',r6:'Metas/comissionamento',r7:'Rotina',r8:'Posicionamento',r9:'Campanhas'};
+
+function showTab(t){
+  document.querySelectorAll('.tab').forEach((b,i)=>{b.classList.toggle('active',['form','respostas'][i]===t)});
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('tab-'+t).classList.add('active');
+  if(t==='respostas')renderTable();
+}
+
+function radio(name){const el=document.querySelector(`input[name="${name}"]:checked`);return el?el.value:'';}
+function checks(name){return [...document.querySelectorAll(`input[name="${name}"]:checked`)].map(e=>e.value).join(', ');}
+
+function setSc(id,v){document.getElementById(id).querySelectorAll('.s-btn').forEach((b,i)=>b.classList.toggle('on',i+1===v));scales[id]=v;updateProg();}
+function setR(id,v){document.getElementById(id).querySelectorAll('.r-btn').forEach((b,i)=>b.classList.toggle('on',i+1<=v));ratings[id]=v;updateProg();}
+
+document.querySelectorAll('.opt input').forEach(inp=>{
+  inp.addEventListener('change',()=>{
+    if(inp.type==='radio')document.querySelectorAll(`input[name="${inp.name}"]`).forEach(r=>r.closest('.opt').classList.remove('on'));
+    inp.closest('.opt').classList.toggle('on',inp.checked);
+    updateProg();
+  });
+});
+document.querySelectorAll('input[type=text],input[type=number],textarea').forEach(el=>el.addEventListener('input',updateProg));
+
+function updateProg(){
+  const radios=['turma','eq','cont','metas','com-team','tec','fu','rec','ag','fat','pac'];
+  const answered=radios.filter(n=>document.querySelector(`input[name="${n}"]:checked`)).length;
+  const texts=['f-nome','f-email','f-org','f-rotina','f-orc','f-leads','f-mkt-open','f-d1','f-d2','f-d3','f-obj','f-caminho','f-ticket','f-abril','f-maio','f-junho'];
+  const filled=texts.filter(id=>{const el=document.getElementById(id);return el&&el.value.trim()}).length;
+  const scOk=scales['sat-mkt']>0?1:0;
+  const rOk=Object.values(ratings).filter(v=>v>0).length;
+  const total=radios.length+texts.length+1+9;
+  document.getElementById('prog').style.width=Math.min(100,Math.round((answered+filled+scOk+rOk)/total*100))+'%';
+}
+
+// Cole aqui a URL gerada após implantar o Apps Script
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyvtvNHy_uFY3gF21i2Cc0P89kFuEk_0trjmDc0L9s_a3TI_IYRlabMoOFhfFttvFN9LQ/exec';
+
+function submitForm(){
+  const nome=document.getElementById('f-nome').value.trim();
+  const email=document.getElementById('f-email').value.trim();
+  const turma=radio('turma');
+  if(!nome||!email||!turma){alert('Preencha pelo menos nome, e-mail e turma para continuar.');return;}
+  const now=new Date();
+  const data={
+    id:Date.now(),
+    dataHora:now.toLocaleString('pt-BR'),
+    nome,email,turma,
+    equipe:radio('eq'),
+    orgEquipe:document.getElementById('f-org').value.trim(),
+    contratacao:radio('cont'),
+    remFixo:document.getElementById('f-rem1').value||'0',
+    remMisto:document.getElementById('f-rem2').value||'0',
+    remVar:document.getElementById('f-rem3').value||'0',
+    metas:radio('metas'),
+    rotina:document.getElementById('f-rotina').value.trim(),
+    comercialTeam:radio('com-team'),
+    tecnicos:radio('tec'),
+    fechamento:document.getElementById('f-orc').value.trim(),
+    atendLeads:document.getElementById('f-leads').value.trim(),
+    followup:radio('fu'),
+    recuperacao:radio('rec'),
+    agencia:radio('ag'),
+    servicosMkt:checks('mkt'),
+    satMkt:scales['sat-mkt'],
+    mktOpen:document.getElementById('f-mkt-open').value.trim(),
+    dor1:document.getElementById('f-d1').value.trim(),
+    dor2:document.getElementById('f-d2').value.trim(),
+    dor3:document.getElementById('f-d3').value.trim(),
+    objetivo:document.getElementById('f-obj').value.trim(),
+    caminho:document.getElementById('f-caminho').value.trim(),
+    faturamentoQ1:radio('fat'),
+    ticket:document.getElementById('f-ticket').value.trim(),
+    pacientes:radio('pac'),
+    expAbril:document.getElementById('f-abril').value.trim(),
+    expMaio:document.getElementById('f-maio').value.trim(),
+    expJunho:document.getElementById('f-junho').value.trim(),
+    implEquipe:ratings.r1,implComercial:ratings.r2,implVendas:ratings.r3,
+    implFollowup:ratings.r4,implPreco:ratings.r5,implMetas:ratings.r6,
+    implRotina:ratings.r7,implPosic:ratings.r8,implCampanhas:ratings.r9
+  };
+  responses.push(data);
+  document.getElementById('count-badge').textContent=responses.length;
+  document.getElementById('form-view').style.display='none';
+  document.getElementById('ty').classList.add('show');
+
+  // Envia para o Google Sheets via Apps Script
+  if(SCRIPT_URL && SCRIPT_URL !== 'COLE_AQUI_A_URL_DO_APPS_SCRIPT'){
+    fetch(SCRIPT_URL, {
+      method:'POST',
+      mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(data)
+    }).catch(()=>{}); // silencia erros de rede — o envio local já foi salvo
+  }
+}
+
+function setFilter(f){
+  currentFilter=f;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.toggle('on',b.textContent.trim()===f));
+  renderTable();
+}
+
+function renderTable(){
+  const filtered=currentFilter==='Todas'?responses:responses.filter(r=>r.turma===currentFilter);
+  const tbody=document.getElementById('res-tbody');
+  const empty=document.getElementById('empty-state');
+  document.getElementById('st-total').textContent=responses.length;
+  document.getElementById('st-t1').textContent=responses.filter(r=>r.turma==='Turma 1').length;
+  document.getElementById('st-t2').textContent=responses.filter(r=>r.turma==='Turma 2').length;
+  document.getElementById('st-t3').textContent=responses.filter(r=>r.turma==='Turma 3').length;
+  document.getElementById('st-last').textContent=responses.length?responses[responses.length-1].dataHora:'—';
+  document.getElementById('res-sub').textContent=responses.length?`${responses.length} resposta${responses.length>1?'s':''} recebida${responses.length>1?'s':''}. Última: ${responses[responses.length-1].dataHora}`:'Nenhuma resposta ainda';
+  if(!filtered.length){tbody.innerHTML='';empty.style.display='block';return;}
+  empty.style.display='none';
+  const tcls={['Turma 1']:'t1',['Turma 2']:'t2',['Turma 3']:'t3'};
+  tbody.innerHTML=filtered.map((r,i)=>`
+    <tr>
+      <td style="color:var(--color-text-secondary)">${i+1}</td>
+      <td style="white-space:nowrap;color:var(--color-text-secondary)">${r.dataHora}</td>
+      <td style="font-weight:500">${r.nome}</td>
+      <td style="color:var(--color-text-secondary)">${r.email}</td>
+      <td><span class="turma-badge ${tcls[r.turma]||''}">${r.turma}</span></td>
+      <td>${r.equipe||'—'}</td>
+      <td>${r.faturamentoQ1||'—'}</td>
+      <td>${r.ticket||'—'}</td>
+      <td><button class="detail-btn" onclick="openDetail(${r.id})">Ver tudo</button></td>
+    </tr>`).join('');
+}
+
+function openDetail(id){
+  const r=responses.find(x=>x.id===id);if(!r)return;
+  document.getElementById('modal-title').textContent=r.nome+' — '+r.turma;
+  const fields=[
+    ['Data/hora',r.dataHora],['E-mail',r.email],['Turma',r.turma],
+    ['Tamanho da equipe',r.equipe],['Organização da equipe',r.orgEquipe],
+    ['Contratação',r.contratacao],
+    ['Remuneração — só fixo',r.remFixo+' pessoas'],['Remuneração — fixo+var',r.remMisto+' pessoas'],['Remuneração — só variável',r.remVar+' pessoas'],
+    ['Metas e bonificação',r.metas],['Rotina',r.rotina],['Equipe comercial',r.comercialTeam],['Profissionais técnicos',r.tecnicos],
+    ['Fechamento de orçamentos',r.fechamento],['Atendimento de leads',r.atendLeads],['Follow-up',r.followup],['Recuperação de orçamentos',r.recuperacao],
+    ['Agência de marketing',r.agencia],['Serviços da agência',r.servicosMkt||'—'],['Satisfação marketing',r.satMkt+'/5'],['Percepção do marketing',r.mktOpen],
+    ['Principal dor',r.dor1],['Onde perde oportunidades',r.dor2],['O que não funcionou',r.dor3],
+    ['Objetivo 6 meses',r.objetivo],['O que precisa acontecer',r.caminho],
+    ['Faturamento Q1',r.faturamentoQ1],['Ticket médio',r.ticket],['Pacientes no trimestre',r.pacientes],
+    ['Expectativa Abril',r.expAbril],['Expectativa Maio',r.expMaio],['Expectativa Junho',r.expJunho],
+    ['Nível: Equipe',r.implEquipe+'/5'],['Nível: Cultura comercial',r.implComercial+'/5'],
+    ['Nível: Processo de vendas',r.implVendas+'/5'],['Nível: Follow-up',r.implFollowup+'/5'],
+    ['Nível: Precificação',r.implPreco+'/5'],['Nível: Metas',r.implMetas+'/5'],
+    ['Nível: Rotina',r.implRotina+'/5'],['Nível: Posicionamento',r.implPosic+'/5'],['Nível: Campanhas',r.implCampanhas+'/5']
+  ];
+  document.getElementById('modal-body').innerHTML=fields.map(([q,a])=>`
+    <div class="modal-field">
+      <div class="modal-q">${q}</div>
+      <div class="modal-a">${a||'—'}</div>
+    </div>`).join('');
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal(e){if(e.target===document.getElementById('modal'))document.getElementById('modal').classList.remove('open');}
+
+function exportCSV(){
+  if(!responses.length){alert('Nenhuma resposta para exportar ainda.');return;}
+  const cols=['Data/hora','Nome','E-mail','Turma','Equipe','Organização','Contratação','Rem. Fixo','Rem. Fixo+Var','Rem. Variável','Metas','Rotina','Equipe comercial','Técnicos','Fechamento','Leads','Follow-up','Recuperação','Agência','Serviços MKT','Sat. MKT','Percepção MKT','Dor principal','Oportunidades perdidas','O que não funcionou','Objetivo 6m','Como chegar lá','Fat. Q1','Ticket médio','Pacientes','Exp. Abril','Exp. Maio','Exp. Junho','Niv. Equipe','Niv. Comercial','Niv. Vendas','Niv. Follow-up','Niv. Preço','Niv. Metas','Niv. Rotina','Niv. Posic.','Niv. Campanhas'];
+  const rows=responses.map(r=>[r.dataHora,r.nome,r.email,r.turma,r.equipe,r.orgEquipe,r.contratacao,r.remFixo,r.remMisto,r.remVar,r.metas,r.rotina,r.comercialTeam,r.tecnicos,r.fechamento,r.atendLeads,r.followup,r.recuperacao,r.agencia,r.servicosMkt,r.satMkt,r.mktOpen,r.dor1,r.dor2,r.dor3,r.objetivo,r.caminho,r.faturamentoQ1,r.ticket,r.pacientes,r.expAbril,r.expMaio,r.expJunho,r.implEquipe,r.implComercial,r.implVendas,r.implFollowup,r.implPreco,r.implMetas,r.implRotina,r.implPosic,r.implCampanhas].map(v=>'"'+(String(v||'').replace(/"/g,'""'))+'"'));
+  const csv=[cols.map(c=>'"'+c+'"').join(','),...rows.map(r=>r.join(','))].join('\n');
+  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download='respostas_mentoria_q1.csv';a.click();URL.revokeObjectURL(url);
+}
+</script>
