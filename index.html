@@ -1,126 +1,141 @@
-
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Avaliação Estratégica — 1º Trimestre · Mentoria Impacto</title>
 <style>
 :root{--gold:#C49A2A;--gold-bg:#FFF8E7;--s1:#185FA5;--s2:#BA7517;--s3:#3B6D11;--s4:#A32D2D;--s5:#534AB7;--s6:#5F5E5A;--s7:#854F0B}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--font-sans,sans-serif);background:var(--color-background-tertiary);color:var(--color-text-primary);font-size:15px;line-height:1.6}
-.app{display:flex;flex-direction:column;min-height:600px}
-.tabs{display:flex;border-bottom:1px solid var(--color-border-tertiary);background:var(--color-background-primary);position:sticky;top:0;z-index:100}
-.tab{padding:12px 20px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:none;color:var(--color-text-secondary);border-bottom:2px solid transparent;transition:all .2s}
-.tab.active{color:var(--color-text-primary);border-bottom-color:var(--gold)}
-.tab-badge{display:inline-flex;align-items:center;justify-content:center;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:10px;font-size:11px;padding:1px 7px;margin-left:6px;color:var(--color-text-secondary)}
+body{font-family:system-ui,-apple-system,sans-serif;background:#f5f5f8;color:#111;font-size:15px;line-height:1.6}
+.app{display:flex;flex-direction:column;min-height:100vh}
+.tabs{display:flex;border-bottom:1px solid #e0e0e8;background:#fff;position:sticky;top:0;z-index:100}
+.tab{padding:12px 20px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:none;color:#666;border-bottom:2px solid transparent;transition:all .2s}
+.tab.active{color:#111;border-bottom-color:var(--gold)}
+.tab-badge{display:inline-flex;align-items:center;justify-content:center;background:#f0f0f4;border:0.5px solid #ddd;border-radius:10px;font-size:11px;padding:1px 7px;margin-left:6px;color:#666}
 .tab.active .tab-badge{background:#FFF8E7;color:var(--gold);border-color:#E8C97A}
 .page{display:none;padding:24px}
 .page.active{display:block}
 
-/* FORM */
+/* LOCK SCREEN */
+.lock-screen{display:flex;align-items:center;justify-content:center;min-height:60vh}
+.lock-card{background:#fff;border:0.5px solid #e0e0e8;border-radius:16px;padding:40px 36px;max-width:360px;width:100%;text-align:center}
+.lock-icon{font-size:36px;margin-bottom:16px;opacity:.6}
+.lock-title{font-size:18px;font-weight:500;margin-bottom:8px}
+.lock-desc{font-size:13px;color:#888;margin-bottom:24px}
+.lock-input{width:100%;background:#f5f5f8;border:0.5px solid #ccc;border-radius:8px;color:#111;font-family:inherit;font-size:15px;padding:12px 16px;outline:none;text-align:center;letter-spacing:2px;transition:border-color .2s;margin-bottom:12px}
+.lock-input:focus{border-color:var(--gold);box-shadow:0 0 0 2px rgba(196,154,42,.15)}
+.lock-input.error{border-color:#A32D2D;box-shadow:0 0 0 2px rgba(163,45,45,.12)}
+.lock-btn{width:100%;background:var(--gold);border:none;border-radius:20px;color:#fff;cursor:pointer;font-family:inherit;font-size:14px;font-weight:500;padding:12px;transition:all .2s}
+.lock-btn:hover{opacity:.9}
+.lock-error{font-size:12px;color:#A32D2D;margin-top:8px;min-height:18px}
+
 .form-header{text-align:center;padding:32px 24px 24px;max-width:660px;margin:0 auto}
 .form-tag{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:12px}
 .form-title{font-size:24px;font-weight:500;line-height:1.3;margin-bottom:12px}
-.form-desc{font-size:13px;color:var(--color-text-secondary);max-width:480px;margin:0 auto 16px}
-.form-time{display:inline-flex;align-items:center;gap:6px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--color-text-secondary)}
-.progress{background:var(--color-background-secondary);height:3px;margin:0 24px 24px;border-radius:10px;overflow:hidden;max-width:612px;margin-left:auto;margin-right:auto}
+.form-desc{font-size:13px;color:#666;max-width:480px;margin:0 auto 16px}
+.form-time{display:inline-flex;align-items:center;gap:6px;background:#f5f5f8;border:0.5px solid #ddd;border-radius:20px;padding:6px 14px;font-size:12px;color:#666}
+.progress{background:#eee;height:3px;margin:0 auto 24px;border-radius:10px;overflow:hidden;max-width:660px}
 .progress-fill{height:100%;background:var(--gold);border-radius:10px;width:0%;transition:width .4s ease}
 
 .form-body{max-width:660px;margin:0 auto;display:flex;flex-direction:column;gap:16px;padding-bottom:40px}
-.section-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg)}
-.section-head{display:flex;align-items:center;gap:10px;padding:14px 20px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.section-card{background:#fff;border:0.5px solid #e0e0e8;border-radius:12px}
+.section-head{display:flex;align-items:center;gap:10px;padding:14px 20px;border-bottom:0.5px solid #e0e0e8}
 .section-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .section-name{font-size:14px;font-weight:500}
-.section-num{font-size:11px;color:var(--color-text-secondary);margin-left:auto;letter-spacing:1px}
+.section-num{font-size:11px;color:#888;margin-left:auto;letter-spacing:1px}
 .section-body{padding:20px;display:flex;flex-direction:column;gap:20px}
 
 .field{display:flex;flex-direction:column;gap:8px}
-.field label{font-size:13px;font-weight:500;color:var(--color-text-primary);line-height:1.5}
+.field label{font-size:13px;font-weight:500;color:#111;line-height:1.5}
 .field label .req{color:var(--gold);margin-left:2px}
-.field .hint{font-size:12px;color:var(--color-text-secondary)}
-input[type=text],input[type=number],textarea{background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);color:var(--color-text-primary);font-family:inherit;font-size:13px;padding:10px 14px;width:100%;outline:none;transition:border-color .2s}
+.field .hint{font-size:12px;color:#888}
+input[type=text],input[type=number],textarea{background:#f5f5f8;border:0.5px solid #ccc;border-radius:8px;color:#111;font-family:inherit;font-size:13px;padding:10px 14px;width:100%;outline:none;transition:border-color .2s}
 input[type=text]:focus,input[type=number]:focus,textarea:focus{border-color:var(--gold);box-shadow:0 0 0 2px rgba(196,154,42,.15)}
 textarea{resize:vertical;min-height:80px}
-::placeholder{color:var(--color-text-tertiary)}
+::placeholder{color:#aaa}
 
 .opts{display:flex;flex-wrap:wrap;gap:8px}
-.opt{display:flex;align-items:center;gap:7px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:20px;padding:7px 14px;cursor:pointer;font-size:12px;color:var(--color-text-secondary);transition:all .15s;user-select:none}
+.opt{display:flex;align-items:center;gap:7px;background:#f5f5f8;border:0.5px solid #ccc;border-radius:20px;padding:7px 14px;cursor:pointer;font-size:12px;color:#666;transition:all .15s;user-select:none}
 .opt input{display:none}
-.opt:hover{border-color:var(--color-border-primary);color:var(--color-text-primary)}
+.opt:hover{border-color:#aaa;color:#111}
 .opt.on{border-color:var(--gold);color:var(--gold);background:#FFF8E7}
 
 .scale-wrap{display:flex;flex-direction:column;gap:6px}
 .scale-btns{display:flex;gap:6px}
-.s-btn{flex:1;height:38px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);color:var(--color-text-secondary);font-size:14px;font-weight:500;font-family:inherit;cursor:pointer;transition:all .15s}
-.s-btn:hover{border-color:var(--color-border-primary);color:var(--color-text-primary)}
+.s-btn{flex:1;height:38px;background:#f5f5f8;border:0.5px solid #ccc;border-radius:8px;color:#666;font-size:14px;font-weight:500;font-family:inherit;cursor:pointer;transition:all .15s}
+.s-btn:hover{border-color:#aaa;color:#111}
 .s-btn.on{background:#FFF8E7;border-color:var(--gold);color:var(--gold)}
-.scale-lbs{display:flex;justify-content:space-between;font-size:11px;color:var(--color-text-secondary)}
+.scale-lbs{display:flex;justify-content:space-between;font-size:11px;color:#888}
 
 .rating-grid{display:flex;flex-direction:column;gap:8px}
-.r-row{display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md)}
-.r-lbl{flex:1;font-size:12px;color:var(--color-text-secondary)}
+.r-row{display:flex;align-items:center;gap:12px;padding:10px 14px;background:#f5f5f8;border:0.5px solid #e0e0e8;border-radius:8px}
+.r-lbl{flex:1;font-size:12px;color:#666}
 .r-stars{display:flex;gap:4px}
-.r-btn{width:30px;height:30px;background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:6px;color:var(--color-text-secondary);font-size:12px;font-weight:500;font-family:inherit;cursor:pointer;transition:all .15s}
+.r-btn{width:30px;height:30px;background:#fff;border:0.5px solid #ccc;border-radius:6px;color:#666;font-size:12px;font-weight:500;font-family:inherit;cursor:pointer;transition:all .15px}
 .r-btn.on{background:#FFF8E7;border-color:var(--gold);color:var(--gold)}
 
 .remuner-grid,.trimestre-grid{display:flex;flex-direction:column;gap:8px}
-.remuner-row,.trimestre-row{display:flex;align-items:center;gap:12px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 14px}
-.remuner-lbl,.trimestre-lbl{flex:1;font-size:13px;color:var(--color-text-secondary)}
+.remuner-row,.trimestre-row{display:flex;align-items:center;gap:12px;background:#f5f5f8;border:0.5px solid #e0e0e8;border-radius:8px;padding:10px 14px}
+.remuner-lbl,.trimestre-lbl{flex:1;font-size:13px;color:#666}
 .remuner-input,.trimestre-input{width:120px;padding:8px 12px}
 
 .submit-wrap{text-align:center;padding-top:8px}
 .btn-submit{background:var(--gold);border:none;border-radius:20px;color:#fff;cursor:pointer;font-family:inherit;font-size:14px;font-weight:500;padding:14px 40px;transition:all .2s}
 .btn-submit:hover{opacity:.9;transform:translateY(-1px)}
-.submit-note{margin-top:10px;font-size:12px;color:var(--color-text-secondary)}
+.submit-note{margin-top:10px;font-size:12px;color:#888}
 
-/* RESPOSTAS */
-.respostas-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:gap}
 .respostas-title{font-size:16px;font-weight:500}
-.respostas-sub{font-size:12px;color:var(--color-text-secondary);margin-top:2px}
-.btn-export{background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:8px 16px;font-size:13px;font-family:inherit;cursor:pointer;color:var(--color-text-primary);transition:all .15s}
-.btn-export:hover{background:var(--color-background-secondary)}
+.respostas-sub{font-size:12px;color:#888;margin-top:2px}
+.btn-export{background:#fff;border:0.5px solid #ccc;border-radius:8px;padding:8px 16px;font-size:13px;font-family:inherit;cursor:pointer;color:#111;transition:all .15s}
+.btn-export:hover{background:#f5f5f8}
+.btn-logout{background:none;border:0.5px solid #e0e0e8;border-radius:8px;padding:8px 14px;font-size:12px;font-family:inherit;cursor:pointer;color:#888;transition:all .15s}
+.btn-logout:hover{color:#111;border-color:#ccc}
 
 .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
-.stat-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:14px 16px}
-.stat-label{font-size:12px;color:var(--color-text-secondary);margin-bottom:4px}
+.stat-card{background:#f5f5f8;border-radius:8px;padding:14px 16px}
+.stat-label{font-size:12px;color:#888;margin-bottom:4px}
 .stat-val{font-size:22px;font-weight:500}
 
 .filter-row{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
-.filter-btn{padding:6px 14px;font-size:12px;font-family:inherit;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);border-radius:20px;cursor:pointer;color:var(--color-text-secondary);transition:all .15s}
+.filter-btn{padding:6px 14px;font-size:12px;font-family:inherit;border:0.5px solid #ccc;background:#fff;border-radius:20px;cursor:pointer;color:#666;transition:all .15s}
 .filter-btn.on{border-color:var(--gold);color:var(--gold);background:#FFF8E7}
 
-.table-wrap{overflow-x:auto;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);background:var(--color-background-primary)}
+.table-wrap{overflow-x:auto;border:0.5px solid #e0e0e8;border-radius:12px;background:#fff}
 table{width:100%;border-collapse:collapse;font-size:12px;min-width:700px}
-th{text-align:left;padding:10px 14px;font-weight:500;color:var(--color-text-secondary);font-size:11px;letter-spacing:.5px;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);white-space:nowrap}
-td{padding:10px 14px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary);vertical-align:top}
+th{text-align:left;padding:10px 14px;font-weight:500;color:#888;font-size:11px;letter-spacing:.5px;border-bottom:0.5px solid #e0e0e8;background:#f5f5f8;white-space:nowrap}
+td{padding:10px 14px;border-bottom:0.5px solid #e0e0e8;color:#111;vertical-align:top}
 tr:last-child td{border-bottom:none}
-tr:hover td{background:var(--color-background-secondary)}
+tr:hover td{background:#fafafa}
 .turma-badge{display:inline-flex;padding:2px 10px;border-radius:10px;font-size:11px;font-weight:500}
 .t1{background:#E6F1FB;color:#185FA5}.t2{background:#EAF3DE;color:#3B6D11}.t3{background:#FAEEDA;color:#854F0B}
-.empty-state{text-align:center;padding:60px 24px;color:var(--color-text-secondary)}
-.empty-icon{font-size:32px;margin-bottom:12px;opacity:.4}
+.empty-state{text-align:center;padding:60px 24px;color:#888}
 .detail-btn{background:none;border:none;color:var(--gold);cursor:pointer;font-size:12px;font-family:inherit;padding:0;text-decoration:underline}
 
-/* MODAL */
 .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:center;justify-content:center;padding:20px}
 .modal-bg.open{display:flex}
-.modal{background:var(--color-background-primary);border-radius:var(--border-radius-lg);max-width:580px;width:100%;max-height:80vh;overflow-y:auto;padding:24px}
+.modal{background:#fff;border-radius:12px;max-width:580px;width:100%;max-height:80vh;overflow-y:auto;padding:24px}
 .modal-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
 .modal-title{font-size:16px;font-weight:500}
-.modal-close{background:none;border:none;cursor:pointer;color:var(--color-text-secondary);font-size:20px;line-height:1;padding:0}
+.modal-close{background:none;border:none;cursor:pointer;color:#888;font-size:20px;line-height:1;padding:0}
 .modal-body{display:flex;flex-direction:column;gap:14px}
-.modal-field{border-bottom:0.5px solid var(--color-border-tertiary);padding-bottom:12px}
+.modal-field{border-bottom:0.5px solid #e0e0e8;padding-bottom:12px}
 .modal-field:last-child{border-bottom:none;padding-bottom:0}
-.modal-q{font-size:12px;color:var(--color-text-secondary);margin-bottom:4px}
-.modal-a{font-size:13px;color:var(--color-text-primary)}
+.modal-q{font-size:12px;color:#888;margin-bottom:4px}
+.modal-a{font-size:13px;color:#111}
 
-/* THANK YOU */
 .ty{display:none;text-align:center;padding:80px 24px}
 .ty.show{display:block}
 .ty-icon{font-size:48px;margin-bottom:20px;opacity:.7}
 .ty-title{font-size:22px;font-weight:500;margin-bottom:10px}
-.ty-desc{font-size:14px;color:var(--color-text-secondary);max-width:360px;margin:0 auto}
+.ty-desc{font-size:14px;color:#888;max-width:360px;margin:0 auto}
 </style>
-
+</head>
+<body>
 <div class="app">
   <div class="tabs">
     <button class="tab active" onclick="showTab('form')">Formulário</button>
-    <button class="tab" onclick="showTab('respostas')">Respostas <span class="tab-badge" id="count-badge">0</span></button>
+    <button class="tab" onclick="tryRespostas()">Respostas <span class="tab-badge" id="count-badge">0</span></button>
   </div>
 
   <!-- FORMULÁRIO -->
@@ -135,17 +150,12 @@ tr:hover td{background:var(--color-background-secondary)}
       <div class="progress"><div class="progress-fill" id="prog"></div></div>
       <div class="form-body">
 
-        <!-- IDENTIFICAÇÃO -->
         <div class="section-card">
-          <div class="section-head">
-            <div class="section-dot" style="background:var(--gold)"></div>
-            <div class="section-name">Identificação</div>
-          </div>
+          <div class="section-head"><div class="section-dot" style="background:var(--gold)"></div><div class="section-name">Identificação</div></div>
           <div class="section-body">
             <div class="field"><label>Nome completo<span class="req">*</span></label><input type="text" id="f-nome" placeholder="Seu nome completo"></div>
             <div class="field"><label>E-mail<span class="req">*</span></label><input type="text" id="f-email" placeholder="seu@email.com"></div>
-            <div class="field">
-              <label>Turma<span class="req">*</span></label>
+            <div class="field"><label>Turma<span class="req">*</span></label>
               <div class="opts">
                 <label class="opt"><input type="radio" name="turma" value="Turma 1">Turma 1</label>
                 <label class="opt"><input type="radio" name="turma" value="Turma 2">Turma 2</label>
@@ -155,13 +165,8 @@ tr:hover td{background:var(--color-background-secondary)}
           </div>
         </div>
 
-        <!-- S1 -->
         <div class="section-card">
-          <div class="section-head">
-            <div class="section-dot" style="background:var(--s1)"></div>
-            <div class="section-name">Processos e Pessoas</div>
-            <div class="section-num">01</div>
-          </div>
+          <div class="section-head"><div class="section-dot" style="background:var(--s1)"></div><div class="section-name">Processos e Pessoas</div><div class="section-num">01</div></div>
           <div class="section-body">
             <div class="field"><label>Quantas pessoas fazem parte da sua equipe?<span class="req">*</span></label>
               <div class="opts">
@@ -203,7 +208,7 @@ tr:hover td{background:var(--color-background-secondary)}
                 <label class="opt"><input type="radio" name="com-team" value="Não">Não</label>
               </div>
             </div>
-            <div class="field"><label>Conta com profissionais técnicos (esteticista, enfermeira, fisioterapeuta)?<span class="req">*</span></label>
+            <div class="field"><label>Conta com profissionais técnicos?<span class="req">*</span></label>
               <div class="opts">
                 <label class="opt"><input type="radio" name="tec" value="Sim">Sim</label>
                 <label class="opt"><input type="radio" name="tec" value="Não">Não</label>
@@ -212,13 +217,8 @@ tr:hover td{background:var(--color-background-secondary)}
           </div>
         </div>
 
-        <!-- S2 -->
         <div class="section-card">
-          <div class="section-head">
-            <div class="section-dot" style="background:var(--s2)"></div>
-            <div class="section-name">Comercial</div>
-            <div class="section-num">02</div>
-          </div>
+          <div class="section-head"><div class="section-dot" style="background:var(--s2)"></div><div class="section-name">Comercial</div><div class="section-num">02</div></div>
           <div class="section-body">
             <div class="field"><label>Como acontece o fechamento dos orçamentos?<span class="req">*</span></label><textarea id="f-orc" placeholder="Do contato à decisão de compra..."></textarea></div>
             <div class="field"><label>Como é feito o atendimento dos leads?<span class="req">*</span></label><textarea id="f-leads" placeholder="WhatsApp, ligação, presencial, tempo de resposta..."></textarea></div>
@@ -238,13 +238,8 @@ tr:hover td{background:var(--color-background-secondary)}
           </div>
         </div>
 
-        <!-- S3 -->
         <div class="section-card">
-          <div class="section-head">
-            <div class="section-dot" style="background:var(--s3)"></div>
-            <div class="section-name">Marketing</div>
-            <div class="section-num">03</div>
-          </div>
+          <div class="section-head"><div class="section-dot" style="background:var(--s3)"></div><div class="section-name">Marketing</div><div class="section-num">03</div></div>
           <div class="section-body">
             <div class="field"><label>Possui agência de marketing?<span class="req">*</span></label>
               <div class="opts">
@@ -252,7 +247,7 @@ tr:hover td{background:var(--color-background-secondary)}
                 <label class="opt"><input type="radio" name="ag" value="Não">Não</label>
               </div>
             </div>
-            <div class="field"><label>Quais serviços a agência realiza? (marque os que se aplicam)</label>
+            <div class="field"><label>Quais serviços a agência realiza?</label>
               <div class="opts">
                 <label class="opt"><input type="checkbox" name="mkt" value="Tráfego pago">Tráfego pago</label>
                 <label class="opt"><input type="checkbox" name="mkt" value="Posts">Posts</label>
@@ -276,44 +271,29 @@ tr:hover td{background:var(--color-background-secondary)}
                 <div class="scale-lbs"><span>Muito insatisfeito</span><span>Muito satisfeito</span></div>
               </div>
             </div>
-            <div class="field"><label>Na sua visão, como está o marketing da clínica hoje? O que funciona e o que falta?<span class="req">*</span></label><textarea id="f-mkt-open" placeholder="Compartilhe sua percepção — pontos positivos, frustrações, o que sente falta..."></textarea></div>
+            <div class="field"><label>Na sua visão, como está o marketing da clínica hoje? O que funciona e o que falta?<span class="req">*</span></label><textarea id="f-mkt-open" placeholder="Compartilhe sua percepção..."></textarea></div>
           </div>
         </div>
 
-        <!-- S4 -->
         <div class="section-card">
-          <div class="section-head">
-            <div class="section-dot" style="background:var(--s4)"></div>
-            <div class="section-name">Dores e Gargalos</div>
-            <div class="section-num">04</div>
-          </div>
+          <div class="section-head"><div class="section-dot" style="background:var(--s4)"></div><div class="section-name">Dores e Gargalos</div><div class="section-num">04</div></div>
           <div class="section-body">
-            <div class="field"><label>O que mais te incomoda na clínica hoje?<span class="req">*</span></label><textarea id="f-d1" placeholder="Seja honesto — esse espaço é para diagnóstico real..."></textarea></div>
+            <div class="field"><label>O que mais te incomoda na clínica hoje?<span class="req">*</span></label><textarea id="f-d1" placeholder="Seja honesto..."></textarea></div>
             <div class="field"><label>Onde você sente que está perdendo oportunidades?<span class="req">*</span></label><textarea id="f-d2" placeholder="Atendimento, follow-up, marketing, precificação..."></textarea></div>
-            <div class="field"><label>O que você já tentou que não funcionou como esperado?<span class="req">*</span></label><textarea id="f-d3" placeholder="Ações, contratações, processos testados..."></textarea></div>
+            <div class="field"><label>O que você já tentou que não funcionou?<span class="req">*</span></label><textarea id="f-d3" placeholder="Ações, contratações, processos testados..."></textarea></div>
           </div>
         </div>
 
-        <!-- S5 -->
         <div class="section-card">
-          <div class="section-head">
-            <div class="section-dot" style="background:var(--s5)"></div>
-            <div class="section-name">Visão e Objetivos</div>
-            <div class="section-num">05</div>
-          </div>
+          <div class="section-head"><div class="section-dot" style="background:var(--s5)"></div><div class="section-name">Visão e Objetivos</div><div class="section-num">05</div></div>
           <div class="section-body">
             <div class="field"><label>Qual é seu principal objetivo para os próximos 6 meses?<span class="req">*</span></label><textarea id="f-obj" placeholder="Número, posicionamento, equipe, novos serviços..."></textarea></div>
             <div class="field"><label>O que precisa acontecer para chegar lá?<span class="req">*</span></label><textarea id="f-caminho" placeholder="Movimentos, decisões, mudanças necessárias..."></textarea></div>
           </div>
         </div>
 
-        <!-- S6 -->
         <div class="section-card">
-          <div class="section-head">
-            <div class="section-dot" style="background:var(--s6)"></div>
-            <div class="section-name">Números</div>
-            <div class="section-num">06</div>
-          </div>
+          <div class="section-head"><div class="section-dot" style="background:var(--s6)"></div><div class="section-name">Números</div><div class="section-num">06</div></div>
           <div class="section-body">
             <div class="field"><label>Faturamento médio mensal no 1º trimestre<span class="req">*</span></label>
               <div class="opts">
@@ -343,15 +323,10 @@ tr:hover td{background:var(--color-background-secondary)}
           </div>
         </div>
 
-        <!-- S7 -->
         <div class="section-card">
-          <div class="section-head">
-            <div class="section-dot" style="background:var(--s7)"></div>
-            <div class="section-name">Nível de Implementação</div>
-            <div class="section-num">07</div>
-          </div>
+          <div class="section-head"><div class="section-dot" style="background:var(--s7)"></div><div class="section-name">Nível de Implementação</div><div class="section-num">07</div></div>
           <div class="section-body">
-            <p style="font-size:12px;color:var(--color-text-secondary)">Avalie de 1 (não implementado) a 5 (totalmente estruturado)</p>
+            <p style="font-size:12px;color:#888">Avalie de 1 (não implementado) a 5 (totalmente estruturado)</p>
             <div class="rating-grid">
               <div class="r-row"><div class="r-lbl">Estrutura e alinhamento da equipe</div><div class="r-stars" id="r1"><button class="r-btn" onclick="setR('r1',1)">1</button><button class="r-btn" onclick="setR('r1',2)">2</button><button class="r-btn" onclick="setR('r1',3)">3</button><button class="r-btn" onclick="setR('r1',4)">4</button><button class="r-btn" onclick="setR('r1',5)">5</button></div></div>
               <div class="r-row"><div class="r-lbl">Cultura comercial na clínica</div><div class="r-stars" id="r2"><button class="r-btn" onclick="setR('r2',1)">1</button><button class="r-btn" onclick="setR('r2',2)">2</button><button class="r-btn" onclick="setR('r2',3)">3</button><button class="r-btn" onclick="setR('r2',4)">4</button><button class="r-btn" onclick="setR('r2',5)">5</button></div></div>
@@ -379,53 +354,59 @@ tr:hover td{background:var(--color-background-secondary)}
     </div>
   </div>
 
-  <!-- RESPOSTAS -->
+  <!-- RESPOSTAS COM LOCK -->
   <div id="tab-respostas" class="page">
-    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;gap:12px;flex-wrap:wrap">
-      <div>
-        <div class="respostas-title">Respostas recebidas</div>
-        <div class="respostas-sub" id="res-sub">Nenhuma resposta ainda</div>
+
+    <!-- TELA DE SENHA -->
+    <div class="lock-screen" id="lock-screen">
+      <div class="lock-card">
+        <div class="lock-icon">🔒</div>
+        <div class="lock-title">Área restrita</div>
+        <p class="lock-desc">Esta área é exclusiva para a mentora. Digite a senha para acessar as respostas.</p>
+        <input type="password" class="lock-input" id="lock-input" placeholder="••••••••••••" onkeydown="if(event.key==='Enter')checkPassword()">
+        <button class="lock-btn" onclick="checkPassword()">Acessar →</button>
+        <div class="lock-error" id="lock-error"></div>
       </div>
-      <div style="display:flex;gap:8px">
-        <button class="btn-export" onclick="exportCSV()">Exportar CSV</button>
+    </div>
+
+    <!-- PAINEL DE RESPOSTAS -->
+    <div id="respostas-panel" style="display:none">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;gap:12px;flex-wrap:wrap">
+        <div>
+          <div class="respostas-title">Respostas recebidas</div>
+          <div class="respostas-sub" id="res-sub">Nenhuma resposta ainda</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="btn-export" onclick="exportCSV()">Exportar CSV</button>
+          <button class="btn-logout" onclick="logout()">Sair</button>
+        </div>
       </div>
-    </div>
-    <div class="stats-row">
-      <div class="stat-card"><div class="stat-label">Total de respostas</div><div class="stat-val" id="st-total">0</div></div>
-      <div class="stat-card"><div class="stat-label">Turma 1</div><div class="stat-val" id="st-t1">0</div></div>
-      <div class="stat-card"><div class="stat-label">Turma 2</div><div class="stat-val" id="st-t2">0</div></div>
-    </div>
-    <div class="stats-row" style="grid-template-columns:1fr 1fr;margin-top:-8px">
-      <div class="stat-card"><div class="stat-label">Turma 3</div><div class="stat-val" id="st-t3">0</div></div>
-      <div class="stat-card"><div class="stat-label">Última resposta</div><div class="stat-val" style="font-size:14px" id="st-last">—</div></div>
-    </div>
-    <div class="filter-row">
-      <button class="filter-btn on" onclick="setFilter('Todas')">Todas</button>
-      <button class="filter-btn" onclick="setFilter('Turma 1')">Turma 1</button>
-      <button class="filter-btn" onclick="setFilter('Turma 2')">Turma 2</button>
-      <button class="filter-btn" onclick="setFilter('Turma 3')">Turma 3</button>
-    </div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Data/hora</th>
-            <th>Nome</th>
-            <th>E-mail</th>
-            <th>Turma</th>
-            <th>Equipe</th>
-            <th>Faturamento Q1</th>
-            <th>Ticket médio</th>
-            <th>Detalhes</th>
-          </tr>
-        </thead>
-        <tbody id="res-tbody"></tbody>
-      </table>
-      <div class="empty-state" id="empty-state">
-        <div class="empty-icon">◻</div>
-        <p style="font-weight:500;margin-bottom:6px">Nenhuma resposta ainda</p>
-        <p style="font-size:13px">As respostas aparecem aqui assim que os alunos enviarem o formulário.</p>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-label">Total</div><div class="stat-val" id="st-total">0</div></div>
+        <div class="stat-card"><div class="stat-label">Turma 1</div><div class="stat-val" id="st-t1">0</div></div>
+        <div class="stat-card"><div class="stat-label">Turma 2</div><div class="stat-val" id="st-t2">0</div></div>
+      </div>
+      <div class="stats-row" style="grid-template-columns:1fr 1fr;margin-top:-8px">
+        <div class="stat-card"><div class="stat-label">Turma 3</div><div class="stat-val" id="st-t3">0</div></div>
+        <div class="stat-card"><div class="stat-label">Última resposta</div><div class="stat-val" style="font-size:14px" id="st-last">—</div></div>
+      </div>
+      <div class="filter-row">
+        <button class="filter-btn on" onclick="setFilter('Todas')">Todas</button>
+        <button class="filter-btn" onclick="setFilter('Turma 1')">Turma 1</button>
+        <button class="filter-btn" onclick="setFilter('Turma 2')">Turma 2</button>
+        <button class="filter-btn" onclick="setFilter('Turma 3')">Turma 3</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>#</th><th>Data/hora</th><th>Nome</th><th>E-mail</th><th>Turma</th><th>Equipe</th><th>Faturamento Q1</th><th>Ticket médio</th><th>Detalhes</th></tr>
+          </thead>
+          <tbody id="res-tbody"></tbody>
+        </table>
+        <div class="empty-state" id="empty-state">
+          <p style="font-weight:500;margin-bottom:6px">Nenhuma resposta ainda</p>
+          <p style="font-size:13px">As respostas aparecem aqui assim que os alunos enviarem o formulário.</p>
+        </div>
       </div>
     </div>
   </div>
@@ -435,7 +416,7 @@ tr:hover td{background:var(--color-background-secondary)}
 <div class="modal-bg" id="modal" onclick="closeModal(event)">
   <div class="modal">
     <div class="modal-top">
-      <div class="modal-title" id="modal-title">Detalhes da resposta</div>
+      <div class="modal-title" id="modal-title">Detalhes</div>
       <button class="modal-close" onclick="document.getElementById('modal').classList.remove('open')">×</button>
     </div>
     <div class="modal-body" id="modal-body"></div>
@@ -443,22 +424,63 @@ tr:hover td{background:var(--color-background-secondary)}
 </div>
 
 <script>
+const SENHA = 'Mentoria@2025';
+let autenticado = false;
 let responses = [];
 let currentFilter = 'Todas';
 const ratings = {r1:0,r2:0,r3:0,r4:0,r5:0,r6:0,r7:0,r8:0,r9:0};
 const scales = {'sat-mkt':0};
-const rLabels = {r1:'Equipe',r2:'Cultura comercial',r3:'Processo de vendas',r4:'Follow-up',r5:'Precificação',r6:'Metas/comissionamento',r7:'Rotina',r8:'Posicionamento',r9:'Campanhas'};
+
+function tryRespostas(){
+  document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',i===1));
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('tab-respostas').classList.add('active');
+  if(autenticado){
+    document.getElementById('lock-screen').style.display='none';
+    document.getElementById('respostas-panel').style.display='block';
+    renderTable();
+  } else {
+    document.getElementById('lock-screen').style.display='flex';
+    document.getElementById('respostas-panel').style.display='none';
+    setTimeout(()=>document.getElementById('lock-input').focus(),100);
+  }
+}
+
+function checkPassword(){
+  const val = document.getElementById('lock-input').value;
+  const inp = document.getElementById('lock-input');
+  const err = document.getElementById('lock-error');
+  if(val === SENHA){
+    autenticado = true;
+    inp.classList.remove('error');
+    err.textContent = '';
+    document.getElementById('lock-screen').style.display='none';
+    document.getElementById('respostas-panel').style.display='block';
+    renderTable();
+  } else {
+    inp.classList.add('error');
+    err.textContent = 'Senha incorreta. Tente novamente.';
+    inp.value='';
+    inp.focus();
+  }
+}
+
+function logout(){
+  autenticado = false;
+  document.getElementById('lock-input').value='';
+  document.getElementById('lock-error').textContent='';
+  document.getElementById('lock-input').classList.remove('error');
+  showTab('form');
+}
 
 function showTab(t){
-  document.querySelectorAll('.tab').forEach((b,i)=>{b.classList.toggle('active',['form','respostas'][i]===t)});
+  document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',['form','respostas'][i]===t));
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('tab-'+t).classList.add('active');
-  if(t==='respostas')renderTable();
 }
 
 function radio(name){const el=document.querySelector(`input[name="${name}"]:checked`);return el?el.value:'';}
-function checks(name){return [...document.querySelectorAll(`input[name="${name}"]:checked`)].map(e=>e.value).join(', ');}
-
+function checks(name){return[...document.querySelectorAll(`input[name="${name}"]:checked`)].map(e=>e.value).join(', ');}
 function setSc(id,v){document.getElementById(id).querySelectorAll('.s-btn').forEach((b,i)=>b.classList.toggle('on',i+1===v));scales[id]=v;updateProg();}
 function setR(id,v){document.getElementById(id).querySelectorAll('.r-btn').forEach((b,i)=>b.classList.toggle('on',i+1<=v));ratings[id]=v;updateProg();}
 
@@ -475,15 +497,12 @@ function updateProg(){
   const radios=['turma','eq','cont','metas','com-team','tec','fu','rec','ag','fat','pac'];
   const answered=radios.filter(n=>document.querySelector(`input[name="${n}"]:checked`)).length;
   const texts=['f-nome','f-email','f-org','f-rotina','f-orc','f-leads','f-mkt-open','f-d1','f-d2','f-d3','f-obj','f-caminho','f-ticket','f-abril','f-maio','f-junho'];
-  const filled=texts.filter(id=>{const el=document.getElementById(id);return el&&el.value.trim()}).length;
+  const filled=texts.filter(id=>{const el=document.getElementById(id);return el&&el.value.trim();}).length;
   const scOk=scales['sat-mkt']>0?1:0;
   const rOk=Object.values(ratings).filter(v=>v>0).length;
   const total=radios.length+texts.length+1+9;
   document.getElementById('prog').style.width=Math.min(100,Math.round((answered+filled+scOk+rOk)/total*100))+'%';
 }
-
-// Cole aqui a URL gerada após implantar o Apps Script
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyvtvNHy_uFY3gF21i2Cc0P89kFuEk_0trjmDc0L9s_a3TI_IYRlabMoOFhfFttvFN9LQ/exec';
 
 function submitForm(){
   const nome=document.getElementById('f-nome').value.trim();
@@ -492,34 +511,25 @@ function submitForm(){
   if(!nome||!email||!turma){alert('Preencha pelo menos nome, e-mail e turma para continuar.');return;}
   const now=new Date();
   const data={
-    id:Date.now(),
-    dataHora:now.toLocaleString('pt-BR'),
-    nome,email,turma,
-    equipe:radio('eq'),
-    orgEquipe:document.getElementById('f-org').value.trim(),
+    id:Date.now(),dataHora:now.toLocaleString('pt-BR'),nome,email,turma,
+    equipe:radio('eq'),orgEquipe:document.getElementById('f-org').value.trim(),
     contratacao:radio('cont'),
     remFixo:document.getElementById('f-rem1').value||'0',
     remMisto:document.getElementById('f-rem2').value||'0',
     remVar:document.getElementById('f-rem3').value||'0',
-    metas:radio('metas'),
-    rotina:document.getElementById('f-rotina').value.trim(),
-    comercialTeam:radio('com-team'),
-    tecnicos:radio('tec'),
+    metas:radio('metas'),rotina:document.getElementById('f-rotina').value.trim(),
+    comercialTeam:radio('com-team'),tecnicos:radio('tec'),
     fechamento:document.getElementById('f-orc').value.trim(),
     atendLeads:document.getElementById('f-leads').value.trim(),
-    followup:radio('fu'),
-    recuperacao:radio('rec'),
-    agencia:radio('ag'),
-    servicosMkt:checks('mkt'),
-    satMkt:scales['sat-mkt'],
+    followup:radio('fu'),recuperacao:radio('rec'),agencia:radio('ag'),
+    servicosMkt:checks('mkt'),satMkt:scales['sat-mkt'],
     mktOpen:document.getElementById('f-mkt-open').value.trim(),
     dor1:document.getElementById('f-d1').value.trim(),
     dor2:document.getElementById('f-d2').value.trim(),
     dor3:document.getElementById('f-d3').value.trim(),
     objetivo:document.getElementById('f-obj').value.trim(),
     caminho:document.getElementById('f-caminho').value.trim(),
-    faturamentoQ1:radio('fat'),
-    ticket:document.getElementById('f-ticket').value.trim(),
+    faturamentoQ1:radio('fat'),ticket:document.getElementById('f-ticket').value.trim(),
     pacientes:radio('pac'),
     expAbril:document.getElementById('f-abril').value.trim(),
     expMaio:document.getElementById('f-maio').value.trim(),
@@ -533,15 +543,10 @@ function submitForm(){
   document.getElementById('form-view').style.display='none';
   document.getElementById('ty').classList.add('show');
 
-  // Envia para o Google Sheets via Apps Script
-  if(SCRIPT_URL && SCRIPT_URL !== 'COLE_AQUI_A_URL_DO_APPS_SCRIPT'){
-    fetch(SCRIPT_URL, {
-      method:'POST',
-      mode:'no-cors',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify(data)
-    }).catch(()=>{}); // silencia erros de rede — o envio local já foi salvo
-  }
+  fetch('https://script.google.com/macros/s/AKfycbyvtvNHy_uFY3gF21i2Cc0P89kFuEk_0trjmDc0L9s_a3TI_IYRlabMoOFhfFttvFN9LQ/exec',{
+    method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(data)
+  }).catch(()=>{});
 }
 
 function setFilter(f){
@@ -552,29 +557,28 @@ function setFilter(f){
 
 function renderTable(){
   const filtered=currentFilter==='Todas'?responses:responses.filter(r=>r.turma===currentFilter);
-  const tbody=document.getElementById('res-tbody');
-  const empty=document.getElementById('empty-state');
   document.getElementById('st-total').textContent=responses.length;
   document.getElementById('st-t1').textContent=responses.filter(r=>r.turma==='Turma 1').length;
   document.getElementById('st-t2').textContent=responses.filter(r=>r.turma==='Turma 2').length;
   document.getElementById('st-t3').textContent=responses.filter(r=>r.turma==='Turma 3').length;
   document.getElementById('st-last').textContent=responses.length?responses[responses.length-1].dataHora:'—';
-  document.getElementById('res-sub').textContent=responses.length?`${responses.length} resposta${responses.length>1?'s':''} recebida${responses.length>1?'s':''}. Última: ${responses[responses.length-1].dataHora}`:'Nenhuma resposta ainda';
+  document.getElementById('res-sub').textContent=responses.length?`${responses.length} resposta${responses.length>1?'s':''} recebida${responses.length>1?'s':''}.`:'Nenhuma resposta ainda';
+  const tbody=document.getElementById('res-tbody');
+  const empty=document.getElementById('empty-state');
   if(!filtered.length){tbody.innerHTML='';empty.style.display='block';return;}
   empty.style.display='none';
-  const tcls={['Turma 1']:'t1',['Turma 2']:'t2',['Turma 3']:'t3'};
-  tbody.innerHTML=filtered.map((r,i)=>`
-    <tr>
-      <td style="color:var(--color-text-secondary)">${i+1}</td>
-      <td style="white-space:nowrap;color:var(--color-text-secondary)">${r.dataHora}</td>
-      <td style="font-weight:500">${r.nome}</td>
-      <td style="color:var(--color-text-secondary)">${r.email}</td>
-      <td><span class="turma-badge ${tcls[r.turma]||''}">${r.turma}</span></td>
-      <td>${r.equipe||'—'}</td>
-      <td>${r.faturamentoQ1||'—'}</td>
-      <td>${r.ticket||'—'}</td>
-      <td><button class="detail-btn" onclick="openDetail(${r.id})">Ver tudo</button></td>
-    </tr>`).join('');
+  const tcls={'Turma 1':'t1','Turma 2':'t2','Turma 3':'t3'};
+  tbody.innerHTML=filtered.map((r,i)=>`<tr>
+    <td style="color:#888">${i+1}</td>
+    <td style="white-space:nowrap;color:#888">${r.dataHora}</td>
+    <td style="font-weight:500">${r.nome}</td>
+    <td style="color:#888">${r.email}</td>
+    <td><span class="turma-badge ${tcls[r.turma]||''}">${r.turma}</span></td>
+    <td>${r.equipe||'—'}</td>
+    <td>${r.faturamentoQ1||'—'}</td>
+    <td>${r.ticket||'—'}</td>
+    <td><button class="detail-btn" onclick="openDetail(${r.id})">Ver tudo</button></td>
+  </tr>`).join('');
 }
 
 function openDetail(id){
@@ -582,26 +586,22 @@ function openDetail(id){
   document.getElementById('modal-title').textContent=r.nome+' — '+r.turma;
   const fields=[
     ['Data/hora',r.dataHora],['E-mail',r.email],['Turma',r.turma],
-    ['Tamanho da equipe',r.equipe],['Organização da equipe',r.orgEquipe],
-    ['Contratação',r.contratacao],
-    ['Remuneração — só fixo',r.remFixo+' pessoas'],['Remuneração — fixo+var',r.remMisto+' pessoas'],['Remuneração — só variável',r.remVar+' pessoas'],
-    ['Metas e bonificação',r.metas],['Rotina',r.rotina],['Equipe comercial',r.comercialTeam],['Profissionais técnicos',r.tecnicos],
-    ['Fechamento de orçamentos',r.fechamento],['Atendimento de leads',r.atendLeads],['Follow-up',r.followup],['Recuperação de orçamentos',r.recuperacao],
-    ['Agência de marketing',r.agencia],['Serviços da agência',r.servicosMkt||'—'],['Satisfação marketing',r.satMkt+'/5'],['Percepção do marketing',r.mktOpen],
+    ['Tamanho da equipe',r.equipe],['Organização',r.orgEquipe],['Contratação',r.contratacao],
+    ['Rem. Só fixo',r.remFixo+' pessoas'],['Rem. Fixo+var',r.remMisto+' pessoas'],['Rem. Só variável',r.remVar+' pessoas'],
+    ['Metas e bonificação',r.metas],['Rotina',r.rotina],['Equipe comercial',r.comercialTeam],['Técnicos',r.tecnicos],
+    ['Fechamento de orçamentos',r.fechamento],['Atendimento de leads',r.atendLeads],
+    ['Follow-up',r.followup],['Recuperação',r.recuperacao],
+    ['Agência',r.agencia],['Serviços MKT',r.servicosMkt||'—'],['Satisfação MKT',r.satMkt+'/5'],['Percepção do marketing',r.mktOpen],
     ['Principal dor',r.dor1],['Onde perde oportunidades',r.dor2],['O que não funcionou',r.dor3],
-    ['Objetivo 6 meses',r.objetivo],['O que precisa acontecer',r.caminho],
-    ['Faturamento Q1',r.faturamentoQ1],['Ticket médio',r.ticket],['Pacientes no trimestre',r.pacientes],
+    ['Objetivo 6 meses',r.objetivo],['Como chegar lá',r.caminho],
+    ['Faturamento Q1',r.faturamentoQ1],['Ticket médio',r.ticket],['Pacientes',r.pacientes],
     ['Expectativa Abril',r.expAbril],['Expectativa Maio',r.expMaio],['Expectativa Junho',r.expJunho],
-    ['Nível: Equipe',r.implEquipe+'/5'],['Nível: Cultura comercial',r.implComercial+'/5'],
-    ['Nível: Processo de vendas',r.implVendas+'/5'],['Nível: Follow-up',r.implFollowup+'/5'],
+    ['Nível: Equipe',r.implEquipe+'/5'],['Nível: Comercial',r.implComercial+'/5'],
+    ['Nível: Vendas',r.implVendas+'/5'],['Nível: Follow-up',r.implFollowup+'/5'],
     ['Nível: Precificação',r.implPreco+'/5'],['Nível: Metas',r.implMetas+'/5'],
     ['Nível: Rotina',r.implRotina+'/5'],['Nível: Posicionamento',r.implPosic+'/5'],['Nível: Campanhas',r.implCampanhas+'/5']
   ];
-  document.getElementById('modal-body').innerHTML=fields.map(([q,a])=>`
-    <div class="modal-field">
-      <div class="modal-q">${q}</div>
-      <div class="modal-a">${a||'—'}</div>
-    </div>`).join('');
+  document.getElementById('modal-body').innerHTML=fields.map(([q,a])=>`<div class="modal-field"><div class="modal-q">${q}</div><div class="modal-a">${a||'—'}</div></div>`).join('');
   document.getElementById('modal').classList.add('open');
 }
 
@@ -609,7 +609,7 @@ function closeModal(e){if(e.target===document.getElementById('modal'))document.g
 
 function exportCSV(){
   if(!responses.length){alert('Nenhuma resposta para exportar ainda.');return;}
-  const cols=['Data/hora','Nome','E-mail','Turma','Equipe','Organização','Contratação','Rem. Fixo','Rem. Fixo+Var','Rem. Variável','Metas','Rotina','Equipe comercial','Técnicos','Fechamento','Leads','Follow-up','Recuperação','Agência','Serviços MKT','Sat. MKT','Percepção MKT','Dor principal','Oportunidades perdidas','O que não funcionou','Objetivo 6m','Como chegar lá','Fat. Q1','Ticket médio','Pacientes','Exp. Abril','Exp. Maio','Exp. Junho','Niv. Equipe','Niv. Comercial','Niv. Vendas','Niv. Follow-up','Niv. Preço','Niv. Metas','Niv. Rotina','Niv. Posic.','Niv. Campanhas'];
+  const cols=['Data/hora','Nome','E-mail','Turma','Equipe','Organização','Contratação','Rem.Fixo','Rem.Fixo+Var','Rem.Variável','Metas','Rotina','Equipe comercial','Técnicos','Fechamento','Leads','Follow-up','Recuperação','Agência','Serviços MKT','Sat.MKT','Percepção MKT','Dor 1','Dor 2','Dor 3','Objetivo','Como chegar lá','Fat.Q1','Ticket','Pacientes','Exp.Abril','Exp.Maio','Exp.Junho','Niv.Equipe','Niv.Comercial','Niv.Vendas','Niv.Follow-up','Niv.Preço','Niv.Metas','Niv.Rotina','Niv.Posic','Niv.Campanhas'];
   const rows=responses.map(r=>[r.dataHora,r.nome,r.email,r.turma,r.equipe,r.orgEquipe,r.contratacao,r.remFixo,r.remMisto,r.remVar,r.metas,r.rotina,r.comercialTeam,r.tecnicos,r.fechamento,r.atendLeads,r.followup,r.recuperacao,r.agencia,r.servicosMkt,r.satMkt,r.mktOpen,r.dor1,r.dor2,r.dor3,r.objetivo,r.caminho,r.faturamentoQ1,r.ticket,r.pacientes,r.expAbril,r.expMaio,r.expJunho,r.implEquipe,r.implComercial,r.implVendas,r.implFollowup,r.implPreco,r.implMetas,r.implRotina,r.implPosic,r.implCampanhas].map(v=>'"'+(String(v||'').replace(/"/g,'""'))+'"'));
   const csv=[cols.map(c=>'"'+c+'"').join(','),...rows.map(r=>r.join(','))].join('\n');
   const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
@@ -617,3 +617,5 @@ function exportCSV(){
   const a=document.createElement('a');a.href=url;a.download='respostas_mentoria_q1.csv';a.click();URL.revokeObjectURL(url);
 }
 </script>
+</body>
+</html>
